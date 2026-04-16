@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>SIFU - Painel Técnico</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="screen">
+  <div class="topbar">
+    <div class="logo-wrap">
+      <div class="logo-col"><div class="logo-bar"></div><div class="logo-name">UFERSA</div><div class="logo-bar"></div></div>
+      <div class="dvv"></div>
+      <div class="sifu-tag">SIFU — Triagem Administrativa</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="role-chip" style="border-color:#2673D4; background:rgba(38,115,212,0.1);"><span class="role-text" style="color:#2673D4;">Técnico Administrativo</span></div>
+      <div class="avatar" style="background:#fff; color:#2673D4;">TA</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="nav-section">
+        <div class="nav-label">Atendimento</div>
+        <div class="nav-item active" id="menu-triagem" onclick="alternarAba('triagem')">Fila de Triagem</div>
+        <div class="nav-item" id="menu-historico" onclick="alternarAba('historico')">Processos Encaminhados</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Opções</div>
+        <div class="nav-item" onclick="window.location.href='sifu_tela_login.html'">Sair (Logoff)</div>
+      </div>
+    </div>
+
+    <div class="content">
+      
+      <div id="view-triagem">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Validação de Documentos e Triagem</div>
+            <div class="page-sub">Verifique os anexos antes de encaminhar para a coordenação.</div>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric"><div class="metric-label">Na fila (Triagem)</div><div class="metric-value mv-amber" id="qtd-fila">0</div></div>
+          <div class="metric"><div class="metric-label">Validados Hoje</div><div class="metric-value mv-blue" id="qtd-validados">0</div></div>
+          <div class="metric"><div class="metric-label">Devolvidos (Erro)</div><div class="metric-value mv-red" id="qtd-devolvidos">0</div></div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-head">
+            <div class="th">Requerente</div>
+            <div class="th">Tipo de Processo</div>
+            <div class="th">Documentos</div>
+            <div class="th">IA Doc</div>
+            <div class="th">Ações</div>
+          </div>
+          <div id="container-triagem"></div>
+        </div>
+
+        <div class="detail-panel" id="painel-detalhes" style="display: none; margin-top: 20px;">
+          <div class="detail-header">
+            <div class="detail-title" id="det-titulo">Conferência de Documentos</div>
+            <span class="pill pill-pending">Aguardando Triagem</span>
+          </div>
+          <div class="detail-body">
+            <div class="detail-section">
+              <div class="ds-title">Arquivos Anexados pelo Aluno</div>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+                <div style="display:flex; align-items:center; gap:8px; padding:10px; border:1px solid #e5e7eb; border-radius:8px; background:#f9fafb;">
+                  <span style="font-size:16px;">📄</span>
+                  <div style="flex:1;"><div style="font-size:12px; font-weight:500;">historico_escolar.pdf</div><div style="font-size:11px; color:#6b7280;">Autenticidade verificada SIGAA</div></div>
+                  <span style="color:#10b981; font-size:12px; font-weight:500;">✓ Legível</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; padding:10px; border:1px solid #e5e7eb; border-radius:8px; background:#f9fafb;">
+                  <span style="font-size:16px;">📄</span>
+                  <div style="flex:1;"><div style="font-size:12px; font-weight:500;">documento_comprobatorio.pdf</div><div style="font-size:11px; color:#6b7280;">Upload manual</div></div>
+                  <span style="color:#10b981; font-size:12px; font-weight:500;">✓ Legível</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:20px; border-top: 1px solid #e5e7eb; padding-top: 14px;">
+            <div class="ds-title">Motivo de Devolução (Preencher apenas se houver erro)</div>
+            <textarea class="obs-field" id="obs-tecnico" rows="2" placeholder="Ex: Atestado médico ilegível. Favor reenviar com melhor resolução."></textarea>
+          </div>
+          
+          <div class="decision-row" id="botoes-acao" style="margin-top: 16px;">
+            </div>
+        </div>
+      </div>
+
+      <div id="view-historico" style="display: none;">
+        <div class="page-title">Processos Tratados</div>
+        <div class="page-sub">Histórico de validações e devoluções realizadas por você.</div>
+        <div class="table-card" style="margin-top: 20px;">
+          <div class="table-head">
+            <div class="th">Requerente</div>
+            <div class="th">Processo</div>
+            <div class="th">Sua Ação</div>
+            <div class="th">Destino</div>
+            <div class="th">Data</div>
+          </div>
+          <div id="container-historico"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  let statsTecnico = { validados: 0, devolvidos: 0 };
+
+  // Controle de Abas
+  function alternarAba(aba) {
+    document.getElementById('view-triagem').style.display = aba === 'triagem' ? 'block' : 'none';
+    document.getElementById('view-historico').style.display = aba === 'historico' ? 'block' : 'none';
+    document.getElementById('menu-triagem').classList.toggle('active', aba === 'triagem');
+    document.getElementById('menu-historico').classList.toggle('active', aba === 'historico');
+    if(aba === 'historico') renderizarHistorico();
+  }
+
+  // Renderiza a fila de triagem (Apenas o que é "Pendente")
+  function renderizarTriagem() {
+    const lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+    const container = document.getElementById('container-triagem');
+    
+    // O Técnico só atua na etapa 1 (Pendente)
+    const pendentes = lista.map((r, i) => ({...r, id: i})).filter(r => r.status === 'Pendente');
+    
+    document.getElementById('qtd-fila').innerText = pendentes.length;
+    document.getElementById('qtd-validados').innerText = statsTecnico.validados;
+    document.getElementById('qtd-devolvidos').innerText = statsTecnico.devolvidos;
+    container.innerHTML = '';
+
+    if(pendentes.length === 0) {
+      container.innerHTML = '<div style="padding: 20px; text-align: center; color: #9ca3af; font-size: 13px;">Nenhum documento pendente de validação no momento.</div>';
+      document.getElementById('painel-detalhes').style.display = 'none';
+      return;
+    }
+
+    pendentes.forEach(req => {
+      const row = document.createElement('div');
+      row.className = 'table-row';
+      row.innerHTML = `
+        <div class="td">Klebson Davi<br><small>2021001234</small></div>
+        <div class="td">${req.tipo}</div>
+        <div class="td">2 Arquivos</div>
+        <div class="td"><span class="ai-ok"><span class="ai-dot-g"></span>Legíveis</span></div>
+        <div class="td action-cell">
+          <button class="btn-view" style="background:#2673D4;" onclick="abrirValidacao(${req.id})">Conferir</button>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  // Abre os detalhes para o técnico julgar
+  function abrirValidacao(index) {
+    const lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+    const req = lista[index];
+    
+    document.getElementById('painel-detalhes').style.display = 'block';
+    document.getElementById('det-titulo').innerText = `Conferência: ${req.tipo} - ${req.disciplina}`;
+    document.getElementById('obs-tecnico').value = '';
+
+    document.getElementById('botoes-acao').innerHTML = `
+      <button class="btn-indefer" style="color:#991b1b; border-color:#fca5a5; background:#fff;" onclick="processarTriagem(${index}, 'Devolvido para Ajuste')">✕ Devolver ao Aluno</button>
+      <button class="btn-defer-full" style="color:#1e40af; border-color:#93c5fd; background:#eff6ff;" onclick="processarTriagem(${index}, 'Em Análise')">✓ Validar e Encaminhar (Coordenação)</button>
+    `;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  // Executa a validação ou devolução
+  function processarTriagem(index, novoStatus) {
+    let lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+    const observacao = document.getElementById('obs-tecnico').value;
+
+    lista[index].status = novoStatus;
+    lista[index].dataTriagem = new Date().toLocaleDateString('pt-BR');
+    
+    // Se devolver, salva o motivo para o aluno ver
+    if(novoStatus === 'Devolvido para Ajuste' && observacao) {
+      lista[index].parecer = "Triagem Doc: " + observacao;
+      statsTecnico.devolvidos++;
+      alert("Processo devolvido ao aluno para correções.");
+    } else {
+      statsTecnico.validados++;
+      alert("Documentação validada! Processo encaminhado para a Coordenação.");
+    }
+
+    localStorage.setItem('meusRequerimentos', JSON.stringify(lista));
+    document.getElementById('painel-detalhes').style.display = 'none';
+    renderizarTriagem();
+  }
+
+  // Renderiza o histórico de coisas que o Técnico já validou/devolveu
+  function renderizarHistorico() {
+    const lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+    const container = document.getElementById('container-historico');
+    
+    // Pega tudo que já passou da fase 'Pendente' (foi pra Análise, Devolvido, Deferido ou Indeferido)
+    const processados = lista.filter(r => r.dataTriagem); 
+    container.innerHTML = '';
+
+    if(processados.length === 0) {
+      container.innerHTML = '<div style="padding:20px;text-align:center;color:#9ca3af;font-size:13px;">Você ainda não processou nenhum requerimento.</div>';
+      return;
+    }
+
+    processados.forEach(req => {
+      let acao = req.status === 'Devolvido para Ajuste' ? 'Devolvido' : 'Validado';
+      let destino = req.status === 'Devolvido para Ajuste' ? 'Discente' : 'Coordenador';
+      let corPill = req.status === 'Devolvido para Ajuste' ? 'mv-red' : 's-approved';
+
+      const row = document.createElement('div');
+      row.className = 'table-row';
+      row.innerHTML = `
+        <div class="td">Klebson Davi</div>
+        <div class="td">${req.tipo}</div>
+        <div class="td"><span class="pill ${corPill}">${acao}</span></div>
+        <div class="td" style="font-size:11px; color:#6b7280;">Encaminhado p/ ${destino}</div>
+        <div class="td">${req.dataTriagem}</div>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  // Inicializa a página
+  window.onload = renderizarTriagem;
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIFU – Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+
+<div class="left-panel">
+  <div class="logo-block">
+    <div class="logo-ufersa">
+      <div class="logo-bar-login"></div>
+      <div class="logo-nome-login">UFERSA</div>
+      <div class="logo-bar-bottom"></div>
+      <div class="logo-sub">Universidade Federal Rural do Semi-Árido</div>
+    </div>
+  </div>
+  <div class="left-title">
+    <h1>Sistema<br>Integrado<br><span>SIFU</span></h1>
+    <p>Módulo de Requerimentos e Turmas Especiais — gestão acadêmica inteligente, ágil e transparente.</p>
+  </div>
+  <div class="chips">
+    <span class="chip">Requerimentos</span>
+    <span class="chip">Turmas Especiais</span>
+    <span class="chip">Triagem com IA</span>
+    <span class="chip">Status em Tempo Real</span>
+  </div>
+</div>
+
+<div class="right-panel">
+  <div class="form-box">
+    <h2>Bem-vindo(a)</h2>
+    <p class="sub">Acesse com suas credenciais institucionais</p>
+
+    <div class="perfil-select">
+      <label>Perfil de Acesso</label>
+      <div class="perfis">
+        <div class="perfil-btn active" data-perfil="discente">Discente</div>
+        <div class="perfil-btn" data-perfil="coordenador">Docente</div>
+        <div class="perfil-btn" data-perfil="tecnico">Técnico</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Matrícula / SIAPE</label>
+      <input type="text" placeholder="Ex: 2023001234">
+    </div>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" placeholder="••••••••••">
+    </div>
+
+    <button class="btn-entrar" onclick="fazerLogin()">Entrar no SIFU</button>
+
+    <p class="divider">Primeiro acesso? <a href="sifu_cadastro.html">Cadastre-se aqui</a></p>
+    <p class="divider" style="margin-top:8px"><a href="sifu_recuperar_senha.html">Esqueceu a senha?</a></p>
+
+    <div class="version">SIFU v1.0 · UFERSA 2026</div>
+  </div>
+</div>
+
+<script>
+  // Script para alternar o visual do botão de perfil selecionado
+  const perfis = document.querySelectorAll('.perfil-btn');
+  perfis.forEach(btn => {
+    btn.onclick = () => {
+      perfis.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    };
+  });
+
+  // Script para ler o perfil ativo e navegar para a tela correta
+  function fazerLogin() {
+    const perfilAtivo = document.querySelector('.perfil-btn.active').getAttribute('data-perfil');
+    
+    if (perfilAtivo === 'discente') {
+      window.location.href = 'sifu_dashboard_discente.html';
+    } else if (perfilAtivo === 'coordenador') {
+      window.location.href = 'sifu_painel_coordenador.html';
+    } else if (perfilAtivo === 'tecnico') {
+      window.location.href = 'sifu_painel_tecnico.html';
+    }
+  }
+</script>
+
+</body>
+</html>

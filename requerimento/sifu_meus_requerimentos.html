@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>SIFU - Meus Requerimentos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="screen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div>
+        <div class="logo-bar"></div>
+        <div class="logo-name">UFERSA</div>
+        <div class="logo-bar"></div>
+      </div>
+      <div class="divider-v"></div>
+      <div class="sifu-tag">SIFU — Requerimentos</div>
+    </div>
+    <div class="user-chip">
+      <div class="avatar">KD</div>
+      <div class="user-name">Klebson Davi · Discente</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="nav-section">
+        <div class="nav-label">Principal</div>
+        <div class="nav-item" onclick="window.location.href='sifu_dashboard_discente.html'">Meu painel</div>
+        <div class="nav-item active">Meus requerimentos</div>
+        <div class="nav-item">Status em tempo real</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Ações</div>
+        <div class="nav-item" onclick="window.location.href='sifu_formulario_requerimento.html'">Abrir requerimento</div>
+        <div class="nav-item">Histórico</div>
+        <div class="nav-item" onclick="window.location.href='sifu_tela_login.html'">Sair (Logoff)</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-header" style="margin-bottom: 24px;">
+        <div>
+          <div class="page-title">Meus Requerimentos</div>
+          <div class="page-sub">Consulte o histórico e o status de todas as suas solicitações.</div>
+        </div>
+        <button class="btn-new" onclick="window.location.href='sifu_formulario_requerimento.html'"><span class="plus">+</span> Novo requerimento</button>
+      </div>
+
+      <div class="filter-bar" style="margin-bottom: 16px;">
+        <button class="filter-btn active" onclick="filtrar('Todos', this)">Todos</button>
+        <button class="filter-btn" onclick="filtrar('Pendente', this)">Pendentes</button>
+        <button class="filter-btn" onclick="filtrar('Em Análise', this)">Em Análise</button>
+        <button class="filter-btn" onclick="filtrar('Deferido', this)">Concluídos</button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-head" style="grid-template-columns: 2fr 2fr 1.5fr 1fr 1fr;">
+          <div class="th">Tipo de Requerimento</div>
+          <div class="th">Disciplina / Assunto</div>
+          <div class="th">Data de Envio</div>
+          <div class="th">Status</div>
+          <div class="th">Ação</div>
+        </div>
+        
+        <div id="lista-historico">
+          </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+  // Função para renderizar a lista com base no filtro
+  function renderizarHistorico(filtroStatus = 'Todos') {
+    const lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+    const container = document.getElementById('lista-historico');
+    container.innerHTML = '';
+
+    // Adiciona o histórico estático de exemplo (para o protótipo não ficar vazio)
+    const historicoEstatico = [
+      { tipo: 'Turma Especial', disciplina: 'Álgebra Linear', data: '15/05/2026', status: 'Deferido' },
+      { tipo: 'Aproveitamento de Estudos', disciplina: 'Estruturas de Dados', data: '28/05/2026', status: 'Em Análise' }
+    ];
+
+    // Junta o que o aluno criou agora com o histórico falso
+    const listaCompleta = [...lista, ...historicoEstatico];
+
+    // Filtra a lista
+    const listaFiltrada = listaCompleta.filter(req => filtroStatus === 'Todos' || req.status === filtroStatus);
+
+    if (listaFiltrada.length === 0) {
+      container.innerHTML = '<div style="padding: 20px; text-align: center; color: #9ca3af; font-size: 13px;">Nenhum requerimento encontrado com este status.</div>';
+      return;
+    }
+
+    listaFiltrada.forEach(req => {
+      // Define as cores do status
+      let classePill = 'pill-pending';
+      if(req.status === 'Deferido') classePill = 's-approved';
+      if(req.status === 'Em Análise') classePill = 'pill-analysis';
+      if(req.status === 'Indeferido') classePill = 's-pending'; // Pode criar uma classe s-denied depois
+
+      const row = document.createElement('div');
+      row.className = 'table-row';
+      row.style.gridTemplateColumns = '2fr 2fr 1.5fr 1fr 1fr';
+      row.innerHTML = `
+        <div class="td" style="font-weight:500; color:#111;">${req.tipo}</div>
+        <div class="td">${req.disciplina}</div>
+        <div class="td">${req.data}</div>
+        <div class="td"><span class="pill ${classePill}">${req.status}</span></div>
+        <div class="td">
+          <button class="btn-view" style="background:#fff; color:#243E6A; border:1px solid #243E6A;" onclick="verDetalhes()">Ver Status</button>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  // Função para controlar os botões de filtro
+  function filtrar(status, btnElement) {
+    // Remove a classe active de todos os botões
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    // Adiciona a classe active no botão clicado
+    btnElement.classList.add('active');
+    
+    // Chama a renderização novamente passando o filtro
+    renderizarHistorico(status);
+  }
+
+  function verDetalhes() {
+    alert("Esta ação abrirá o 'Status em Tempo Real' deste requerimento específico.");
+    // Aqui você poderia redirecionar: window.location.href = 'sifu_status_requerimento.html';
+  }
+
+  // Executa ao carregar a página
+  window.onload = () => renderizarHistorico('Todos');
+</script>
+</body>
+</html>
