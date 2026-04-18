@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIFU - Painel Técnico</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            azulUfersa: '#243E6A',
+            azulEscuro: '#1e3560',
+            verdeUfersa: '#99CC33',
+            cinzaBg: '#f0f2f5',
+          },
+          fontFamily: {
+            roboto: ['Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-roboto bg-cinzaBg min-h-screen">
+
+  <header class="bg-azulUfersa text-white px-5 py-3 flex items-center justify-between shadow-md sticky top-0 z-50">
+    <div class="flex items-center gap-4">
+      <div class="cursor-pointer" onclick="window.location.href='sifu_dashboard_discente.html'">
+        <div class="h-0.5 bg-verdeUfersa w-12 mb-1"></div>
+        <h2 class="text-lg font-bold tracking-widest">UFERSA</h2>
+        <div class="h-0.5 bg-verdeUfersa w-12 mt-1"></div>
+      </div>
+      <div class="hidden md:block w-px h-7 bg-white/20 mx-2"></div>
+      <span class="text-verdeUfersa text-xs font-medium uppercase tracking-wider hidden md:inline">SIFU — Triagem Administrativa</span>
+    </div>
+
+    <div class="flex items-center gap-3 bg-white/10 rounded-full pl-1.5 pr-3 py-1.5 border border-white/5">
+      <div class="hidden sm:flex bg-blue-100 border border-blue-300 px-3 py-1 rounded-full items-center">
+        <span class="text-blue-800 text-[10px] font-bold uppercase tracking-wider">Técnico Administrativo</span>
+      </div>
+      <div class="w-7 h-7 rounded-full bg-white flex items-center justify-center text-blue-800 text-[11px] font-bold shadow-sm">TA</div>
+    </div>
+  </header>
+
+  <div class="flex flex-col md:flex-row">
+    <aside class="w-full md:w-64 bg-azulEscuro text-white/70 md:min-h-[calc(100vh-60px)] p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible sticky top-[60px] md:top-[60px] z-40">
+      
+      <div class="hidden md:block px-2 mb-2"><p class="text-[10px] uppercase tracking-[1px] text-white/30">Atendimento</p></div>
+      <nav class="flex flex-row md:flex-col w-full gap-1">
+        <button id="btn-triagem" onclick="alternarAba('triagem')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-azulUfersa text-white w-full text-sm font-medium transition-all whitespace-nowrap">
+          <span class="md:hidden">🗂️</span> <span class="hidden md:inline">Fila de Triagem</span>
+        </button>
+        <button id="btn-historico" onclick="alternarAba('historico')" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all whitespace-nowrap">
+          <span class="md:hidden">✅</span> <span class="hidden md:inline">Processos Encaminhados</span>
+        </button>
+      </nav>
+
+      <div class="hidden md:block px-2 mt-4 mb-2"><p class="text-[10px] uppercase tracking-[1px] text-white/30">Opções</p></div>
+      <nav class="flex flex-row md:flex-col w-full gap-1">
+        <button onclick="window.location.href='sifu_tela_login.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all text-red-400 whitespace-nowrap">
+          <span class="md:hidden">🚪</span> <span class="hidden md:inline">Sair (Logoff)</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="flex-1 p-5 md:p-8 max-w-6xl mx-auto w-full">
+      
+      <div id="view-triagem" class="block">
+        <div class="mb-8">
+          <h1 class="text-xl font-bold text-azulUfersa">Validação de Documentos e Triagem</h1>
+          <p class="text-sm text-slate-500">Verifique os anexos antes de encaminhar para a coordenação.</p>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-amber-500">
+            <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-2">Na fila (Triagem)</p>
+            <p class="text-3xl font-bold text-amber-600" id="qtd-fila">0</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-2">Validados Hoje</p>
+            <p class="text-3xl font-bold text-blue-600" id="qtd-validados">0</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hidden lg:block">
+            <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-2">Devolvidos (Erro)</p>
+            <p class="text-3xl font-bold text-red-600" id="qtd-devolvidos">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[700px]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Requerente</th>
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Tipo de Processo</th>
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Documentos</th>
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">IA Doc</th>
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="container-triagem" class="divide-y divide-slate-100">
+                </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="painel-detalhes" class="hidden bg-white border border-slate-200 rounded-xl p-6 shadow-lg mb-10">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4 mb-6">
+            <div>
+              <h2 class="text-lg font-bold text-azulUfersa" id="det-titulo">Conferência de Documentos</h2>
+              <p class="text-xs text-slate-500 mt-1">Valide se os arquivos enviados estão legíveis e corretos.</p>
+            </div>
+            <span class="px-3 py-1 bg-amber-100 text-amber-800 text-[10px] font-bold rounded-full uppercase tracking-tighter">Aguardando Triagem</span>
+          </div>
+          
+          <div class="mb-6">
+            <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Arquivos Anexados pelo Aluno</h3>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-3">
+                <span class="text-red-500 text-xl">📄</span>
+                <div class="flex-1">
+                  <p class="text-xs font-bold text-slate-700">historico_escolar.pdf</p>
+                  <p class="text-[10px] text-slate-500">Autenticidade verificada SIGAA</p>
+                </div>
+                <div class="bg-green-100 text-green-700 px-2.5 py-1 rounded-md text-[10px] font-bold flex items-center gap-1">
+                  <span>✓</span> Legível
+                </div>
+              </div>
+              <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-lg p-3">
+                <span class="text-blue-500 text-xl">🖼️</span>
+                <div class="flex-1">
+                  <p class="text-xs font-bold text-slate-700">documento_comprobatorio.jpg</p>
+                  <p class="text-[10px] text-slate-500">Upload manual</p>
+                </div>
+                <div class="bg-green-100 text-green-700 px-2.5 py-1 rounded-md text-[10px] font-bold flex items-center gap-1">
+                  <span>✓</span> Legível
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-6 border-t border-slate-100 pt-6">
+            <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Motivo de Devolução (Opcional)</h3>
+            <p class="text-[10px] text-slate-500 mb-2">Preencha apenas se for devolver o processo para o aluno corrigir algum erro.</p>
+            <textarea id="obs-tecnico" rows="2" placeholder="Ex: O atestado médico anexado está ilegível. Favor reenviar o arquivo com melhor resolução." class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg bg-cinzaBg focus:bg-white focus:border-blue-500 outline-none transition-all text-sm font-medium text-slate-700 resize-y"></textarea>
+          </div>
+
+          <div id="botoes-acao" class="flex flex-col sm:flex-row gap-3">
+            </div>
+        </div>
+      </div>
+
+      <div id="view-historico" class="hidden">
+        <div class="mb-8">
+          <h1 class="text-xl font-bold text-azulUfersa">Processos Tratados</h1>
+          <p class="text-sm text-slate-500">Histórico de validações e devoluções realizadas por si.</p>
+        </div>
+        
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[700px]">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Requerente</th>
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Processo</th>
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Ação Tomada</th>
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Destino</th>
+                  <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Data</th>
+                </tr>
+              </thead>
+              <tbody id="container-historico" class="divide-y divide-slate-100">
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    let statsTecnico = { validados: 0, devolvidos: 0 };
+
+    // --- CONTROLE DE ABAS ---
+    function alternarAba(aba) {
+      document.getElementById('view-triagem').classList.toggle('hidden', aba !== 'triagem');
+      document.getElementById('view-historico').classList.toggle('hidden', aba !== 'historico');
+      
+      const inativoClass = ['hover:bg-white/5', 'text-white/70'];
+      const ativoClass = ['bg-azulUfersa', 'text-white'];
+
+      const btnTriagem = document.getElementById('btn-triagem');
+      const btnHist = document.getElementById('btn-historico');
+
+      [btnTriagem, btnHist].forEach(btn => {
+        btn.classList.remove(...ativoClass);
+        btn.classList.add('hover:bg-white/5');
+      });
+
+      if(aba === 'triagem') btnTriagem.classList.add(...ativoClass);
+      if(aba === 'historico') {
+        btnHist.classList.add(...ativoClass);
+        renderizarHistorico();
+      }
+    }
+
+    // --- FILA DE TRIAGEM ---
+    function renderizarTriagem() {
+      const lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+      const container = document.getElementById('container-triagem');
+      
+      // Técnico atua apenas no status "Pendente"
+      const pendentes = lista.map((r, i) => ({...r, id: i})).filter(r => r.status === 'Pendente');
+      
+      document.getElementById('qtd-fila').innerText = pendentes.length;
+      document.getElementById('qtd-validados').innerText = statsTecnico.validados;
+      document.getElementById('qtd-devolvidos').innerText = statsTecnico.devolvidos;
+      
+      container.innerHTML = '';
+
+      if(pendentes.length === 0) {
+        container.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-sm text-slate-400">Nenhum documento pendente de validação no momento. A fila está limpa!</td></tr>`;
+        document.getElementById('painel-detalhes').classList.add('hidden');
+        return;
+      }
+
+      pendentes.forEach(req => {
+        const row = document.createElement('tr');
+        row.className = "hover:bg-slate-50 transition-colors";
+        row.innerHTML = `
+          <td class="px-6 py-4"><p class="text-sm font-bold text-slate-700">Klebson Davi</p><p class="text-[10px] text-slate-500">2021001234</p></td>
+          <td class="px-6 py-4 text-sm text-slate-600">${req.tipo}</td>
+          <td class="px-6 py-4"><span class="px-2.5 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold rounded-md">2 Arquivos</span></td>
+          <td class="px-6 py-4"><div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-green-500"></div><span class="text-xs text-green-700 font-bold">Legíveis</span></div></td>
+          <td class="px-6 py-4"><button onclick="abrirValidacao(${req.id})" class="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 px-4 py-2 rounded-lg transition-all">Conferir</button></td>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    // Abre detalhes para triagem
+    function abrirValidacao(index) {
+      const lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+      const req = lista[index];
+      
+      document.getElementById('painel-detalhes').classList.remove('hidden');
+      document.getElementById('det-titulo').innerText = `Conferência: ${req.tipo} - ${req.disciplina}`;
+      document.getElementById('obs-tecnico').value = '';
+
+      document.getElementById('botoes-acao').innerHTML = `
+        <button onclick="processarTriagem(${index}, 'Devolvido para Ajuste')" class="flex-1 px-4 py-3 bg-white text-red-600 border border-red-200 font-bold text-sm rounded-lg hover:bg-red-50 transition-colors">✕ Devolver ao Aluno</button>
+        <button onclick="processarTriagem(${index}, 'Em Análise')" class="flex-1 px-4 py-3 bg-blue-50 text-blue-700 border border-blue-300 font-bold text-sm rounded-lg hover:bg-blue-100 transition-colors">✓ Validar e Encaminhar à Coordenação</button>
+      `;
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // Executa ação de triagem
+    function processarTriagem(index, novoStatus) {
+      let lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+      const observacao = document.getElementById('obs-tecnico').value;
+
+      lista[index].status = novoStatus;
+      lista[index].dataTriagem = new Date().toLocaleDateString('pt-BR');
+      
+      if(novoStatus === 'Devolvido para Ajuste') {
+        lista[index].parecer = observacao ? "Triagem Documental: " + observacao : "Triagem Documental: Favor verificar a sua documentação e enviar novamente.";
+        statsTecnico.devolvidos++;
+        alert("Processo devolvido ao aluno para correções.");
+      } else {
+        statsTecnico.validados++;
+        alert("Documentação validada! Processo encaminhado para a Coordenação.");
+      }
+
+      localStorage.setItem('meusRequerimentos', JSON.stringify(lista));
+      document.getElementById('painel-detalhes').classList.add('hidden');
+      renderizarTriagem();
+    }
+
+    // --- HISTÓRICO DE ENCAMINHAMENTOS ---
+    function renderizarHistorico() {
+      const lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+      const container = document.getElementById('container-historico');
+      
+      // Filtra os que já passaram por triagem
+      const processados = lista.filter(r => r.dataTriagem); 
+      container.innerHTML = '';
+
+      if(processados.length === 0) {
+        container.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-sm text-slate-400">Você ainda não processou nenhum requerimento.</td></tr>`;
+        return;
+      }
+
+      processados.forEach(req => {
+        let isDevolvido = req.status === 'Devolvido para Ajuste';
+        let acao = isDevolvido ? 'Devolvido' : 'Validado';
+        let destino = isDevolvido ? 'Discente' : 'Coordenador';
+        let corPill = isDevolvido ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800';
+
+        const row = document.createElement('tr');
+        row.className = "hover:bg-slate-50 transition-colors";
+        row.innerHTML = `
+          <td class="px-6 py-4 text-sm font-bold text-slate-700">Klebson Davi</td>
+          <td class="px-6 py-4 text-sm text-slate-600">${req.tipo}</td>
+          <td class="px-6 py-4"><span class="px-2.5 py-1 ${corPill} text-[10px] font-bold rounded-full uppercase tracking-tighter">${acao}</span></td>
+          <td class="px-6 py-4 text-xs text-slate-500">Encaminhado p/ ${destino}</td>
+          <td class="px-6 py-4 text-sm text-slate-500">${req.dataTriagem}</td>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    // Inicializa
+    window.onload = renderizarTriagem;
+  </script>
+</body>
+</html>

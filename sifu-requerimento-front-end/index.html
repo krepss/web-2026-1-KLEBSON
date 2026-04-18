@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIFU – Login (Tailwind)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <script>
+    // Configuração das cores da UFERSA para usar no Tailwind
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            azulUfersa: '#243E6A',
+            azulEscuro: '#10396B',
+            verdeUfersa: '#99CC33',
+            verdeEscuro: '#60B02C',
+            cinzaBg: '#F4F6FA',
+          },
+          fontFamily: {
+            roboto: ['Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-roboto min-h-screen flex flex-col md:flex-row bg-cinzaBg">
+
+  <div class="md:w-1/2 bg-gradient-to-br from-azulUfersa via-azulEscuro to-[#0A5242] p-10 md:p-14 flex flex-col justify-center relative overflow-hidden text-white">
+    
+    <div class="absolute -top-24 -right-32 w-[420px] h-[420px] rounded-full border-[60px] border-verdeUfersa/10 pointer-events-none"></div>
+    <div class="absolute -bottom-16 -left-20 w-[240px] h-[240px] rounded-full border-[40px] border-white/5 pointer-events-none"></div>
+
+    <div class="z-10">
+      <div class="mb-10">
+        <div class="h-1.5 bg-verdeUfersa w-60 rounded-sm mb-1.5"></div>
+        <h2 class="text-4xl font-black tracking-[4px]">UFERSA</h2>
+        <div class="h-1.5 bg-verdeUfersa w-60 rounded-sm mt-1.5"></div>
+        <p class="text-[10px] uppercase tracking-widest text-white/70 mt-2">Universidade Federal Rural do Semi-Árido</p>
+      </div>
+
+      <h1 class="text-5xl md:text-6xl font-black leading-[1.1] mb-6">
+        Sistema<br>Integrado<br><span class="text-verdeUfersa">SIFU</span>
+      </h1>
+      <p class="text-lg text-white/70 max-w-sm leading-relaxed mb-8">
+        Módulo de Requerimentos e Turmas Especiais — gestão acadêmica inteligente, ágil e transparente.
+      </p>
+
+      <div class="flex flex-wrap gap-2">
+        <span class="px-4 py-1.5 rounded-full bg-white/10 border border-verdeUfersa/30 text-xs tracking-wider">Requerimentos</span>
+        <span class="px-4 py-1.5 rounded-full bg-white/10 border border-verdeUfersa/30 text-xs tracking-wider">Turmas Especiais</span>
+        <span class="px-4 py-1.5 rounded-full bg-white/10 border border-verdeUfersa/30 text-xs tracking-wider">Triagem com IA</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="md:w-1/2 bg-white flex flex-col justify-center items-center p-10 md:p-14">
+    <div class="w-full max-w-[380px]">
+      <h2 class="text-3xl font-bold text-azulUfersa mb-1">Bem-vindo(a)</h2>
+      <p class="text-slate-400 text-sm mb-8">Acesse com suas credenciais institucionais</p>
+
+      <div class="mb-6">
+        <label class="block text-xs font-bold text-azulUfersa uppercase tracking-widest mb-3">Perfil de Acesso</label>
+        <div class="grid grid-cols-3 gap-2" id="perfil-container">
+          <button data-perfil="discente" class="perfil-btn active px-3 py-2.5 border-2 border-slate-200 bg-cinzaBg rounded-lg text-xs font-bold text-slate-400 hover:border-blue-400 transition-all">Discente</button>
+          <button data-perfil="coordenador" class="perfil-btn px-3 py-2.5 border-2 border-slate-200 bg-cinzaBg rounded-lg text-xs font-bold text-slate-400 hover:border-blue-400 transition-all">Docente</button>
+          <button data-perfil="tecnico" class="perfil-btn px-3 py-2.5 border-2 border-slate-200 bg-cinzaBg rounded-lg text-xs font-bold text-slate-400 hover:border-blue-400 transition-all">Técnico</button>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-azulUfersa uppercase tracking-widest mb-2">Matrícula / SIAPE</label>
+          <input type="text" placeholder="Ex: 2023001234" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg bg-cinzaBg focus:bg-white focus:border-blue-500 outline-none transition-all">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-azulUfersa uppercase tracking-widest mb-2">Senha</label>
+          <input type="password" placeholder="••••••••••" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg bg-cinzaBg focus:bg-white focus:border-blue-500 outline-none transition-all">
+        </div>
+      </div>
+
+      <button onclick="fazerLogin()" class="w-full mt-6 py-4 bg-gradient-to-r from-azulUfersa to-blue-500 text-white rounded-lg font-bold shadow-lg shadow-blue-900/20 hover:opacity-90 transition-opacity">
+        Entrar no SIFU
+      </button>
+
+      <div class="mt-6 text-center space-y-2">
+        <p class="text-sm text-slate-400">Primeiro acesso? <a href="sifu_cadastro.html" class="text-verdeEscuro font-bold hover:underline">Cadastre-se aqui</a></p>
+        <p class="text-sm text-slate-400"><a href="sifu_recuperar_senha.html" class="text-verdeEscuro font-bold hover:underline">Esqueceu a senha?</a></p>
+      </div>
+
+      <p class="mt-10 text-center text-[11px] text-slate-300 tracking-wider">SIFU v1.0 · UFERSA 2026</p>
+    </div>
+  </div>
+
+  <style>
+    /* Estilo para o botão de perfil ativo */
+    .perfil-btn.active {
+      background-color: #243E6A;
+      border-color: #243E6A;
+      color: white;
+    }
+  </style>
+
+  <script>
+    // Alternar botões de perfil
+    const btns = document.querySelectorAll('.perfil-btn');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    function fazerLogin() {
+      const perfilAtivo = document.querySelector('.perfil-btn.active').getAttribute('data-perfil');
+      if (perfilAtivo === 'discente') window.location.href = 'sifu_dashboard_discente.html';
+      else if (perfilAtivo === 'coordenador') window.location.href = 'sifu_painel_coordenador.html';
+      else if (perfilAtivo === 'tecnico') window.location.href = 'sifu_painel_tecnico.html';
+    }
+  </script>
+</body>
+</html>

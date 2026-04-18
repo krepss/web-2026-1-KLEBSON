@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIFU - Meus Requerimentos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            azulUfersa: '#243E6A',
+            azulEscuro: '#1e3560',
+            verdeUfersa: '#99CC33',
+            cinzaBg: '#f0f2f5',
+          },
+          fontFamily: {
+            roboto: ['Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-roboto bg-cinzaBg min-h-screen">
+
+  <header class="bg-azulUfersa text-white px-5 py-3 flex items-center justify-between shadow-md sticky top-0 z-50">
+    <div class="flex items-center gap-4">
+      <div class="cursor-pointer" onclick="window.location.href='sifu_dashboard_discente.html'">
+        <div class="h-0.5 bg-verdeUfersa w-12 mb-1"></div>
+        <h2 class="text-lg font-bold tracking-widest">UFERSA</h2>
+        <div class="h-0.5 bg-verdeUfersa w-12 mt-1"></div>
+      </div>
+      <div class="hidden md:block w-px h-7 bg-white/20 mx-2"></div>
+      <span class="text-verdeUfersa text-xs font-medium uppercase tracking-wider hidden md:inline">SIFU — Requerimentos</span>
+    </div>
+
+    <div class="flex items-center gap-3 bg-white/10 rounded-full pl-1.5 pr-3 py-1.5 border border-white/5">
+      <div class="w-7 h-7 rounded-full bg-verdeUfersa flex items-center justify-center text-azulUfersa text-[11px] font-bold">KD</div>
+      <span class="text-xs hidden sm:inline">Klebson Davi · Discente</span>
+    </div>
+  </header>
+
+  <div class="flex flex-col md:flex-row">
+    <aside class="w-full md:w-64 bg-azulEscuro text-white/70 md:min-h-[calc(100vh-60px)] p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible sticky top-[60px] md:top-[60px]">
+      <nav class="flex flex-row md:flex-col w-full gap-1">
+        <button onclick="window.location.href='sifu_dashboard_discente.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all">
+          <span class="md:hidden">🏠</span> <span class="hidden md:inline">Meu painel</span>
+        </button>
+        <button onclick="window.location.href='sifu_meus_requerimentos.html'" class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-azulUfersa text-white w-full text-sm font-medium transition-all">
+          <div class="flex items-center gap-3">
+            <span class="md:hidden">📋</span> <span class="hidden md:inline">Meus requerimentos</span>
+          </div>
+          <span class="bg-verdeUfersa text-azulEscuro text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden md:inline">3</span>
+        </button>
+        <button onclick="window.location.href='sifu_status_requerimento.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all">
+          <span class="md:hidden">🕒</span> <span class="hidden md:inline">Status em tempo real</span>
+        </button>
+      </nav>
+      <div class="hidden md:block w-full h-px bg-white/5 my-4"></div>
+      <nav class="flex flex-row md:flex-col w-full gap-1">
+        <button onclick="window.location.href='sifu_formulario_requerimento.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all">
+          <span class="md:hidden">➕</span> <span class="hidden md:inline">Abrir requerimento</span>
+        </button>
+        <button onclick="window.location.href='sifu_tela_login.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all text-red-400">
+          <span class="md:hidden">🚪</span> <span class="hidden md:inline">Sair (Logoff)</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="flex-1 p-5 md:p-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+        <div>
+          <h1 class="text-xl font-bold text-azulUfersa">Meus Requerimentos</h1>
+          <p class="text-sm text-slate-500">Consulte o histórico e o status de todas as suas solicitações.</p>
+        </div>
+        <button onclick="window.location.href='sifu_formulario_requerimento.html'" class="bg-azulUfersa text-white px-5 py-2.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:bg-azulEscuro transition-all shadow-md">
+          <span>+</span> Novo requerimento
+        </button>
+      </div>
+
+      <div class="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 mb-6 overflow-x-auto no-scrollbar shadow-sm">
+        <button onclick="filtrar('Todos', this)" class="filter-btn active px-4 py-2 text-xs font-bold rounded-lg transition-all whitespace-nowrap">Todos</button>
+        <button onclick="filtrar('Pendente', this)" class="filter-btn px-4 py-2 text-xs font-bold text-slate-500 hover:text-azulUfersa rounded-lg transition-all whitespace-nowrap">Pendentes</button>
+        <button onclick="filtrar('Em Análise', this)" class="filter-btn px-4 py-2 text-xs font-bold text-slate-500 hover:text-azulUfersa rounded-lg transition-all whitespace-nowrap">Em Análise</button>
+        <button onclick="filtrar('Deferido', this)" class="filter-btn px-4 py-2 text-xs font-bold text-slate-500 hover:text-azulUfersa rounded-lg transition-all whitespace-nowrap">Concluídos</button>
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200">
+                <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Tipo de Requerimento</th>
+                <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Disciplina / Assunto</th>
+                <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Data de Envio</th>
+                <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Status</th>
+                <th class="px-6 py-4 text-[10px] uppercase font-bold text-slate-400 tracking-wider">Ação</th>
+              </tr>
+            </thead>
+            <tbody id="lista-historico" class="divide-y divide-slate-100">
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <style>
+    /* Estilo para a tab de filtro ativa */
+    .filter-btn.active {
+      background-color: #243E6A;
+      color: white;
+    }
+    /* Esconder scrollbar mas manter funcionalidade */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+
+  <script>
+    function renderizarHistorico(filtroStatus = 'Todos') {
+      const lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+      const container = document.getElementById('lista-historico');
+      container.innerHTML = '';
+
+      const historicoEstatico = [
+        { tipo: 'Turma Especial', disciplina: 'Álgebra Linear', data: '15/05/2026', status: 'Deferido' },
+        { tipo: 'Aproveitamento de Estudos', disciplina: 'Estruturas de Dados', data: '28/05/2026', status: 'Em Análise' }
+      ];
+
+      const listaCompleta = [...lista, ...historicoEstatico];
+      const listaFiltrada = listaCompleta.filter(req => filtroStatus === 'Todos' || req.status === filtroStatus);
+
+      if (listaFiltrada.length === 0) {
+        container.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-sm text-slate-400">Nenhum requerimento encontrado com este status.</td></tr>`;
+        return;
+      }
+
+      listaFiltrada.forEach(req => {
+        let corStatus = 'bg-amber-100 text-amber-800';
+        if(req.status === 'Deferido') corStatus = 'bg-green-100 text-green-800';
+        if(req.status === 'Em Análise') corStatus = 'bg-blue-100 text-blue-800';
+
+        const row = document.createElement('tr');
+        row.className = "hover:bg-slate-50 transition-colors";
+        row.innerHTML = `
+          <td class="px-6 py-4 text-sm font-bold text-slate-700">${req.tipo}</td>
+          <td class="px-6 py-4 text-sm text-slate-500">${req.disciplina}</td>
+          <td class="px-6 py-4 text-sm text-slate-500">${req.data}</td>
+          <td class="px-6 py-4">
+            <span class="px-2.5 py-1 ${corStatus} text-[10px] font-bold rounded-full uppercase tracking-tighter">${req.status}</span>
+          </td>
+          <td class="px-6 py-4">
+            <button onclick="window.location.href='sifu_status_requerimento.html'" class="text-xs font-bold text-azulUfersa hover:text-blue-800 border border-azulUfersa/20 px-3 py-1.5 rounded-lg bg-white shadow-sm hover:bg-azulUfersa hover:text-white transition-all">Ver Status</button>
+          </td>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function filtrar(status, btnElement) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'text-white', 'bg-azulUfersa'));
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.add('text-slate-500'));
+      
+      btnElement.classList.add('active');
+      renderizarHistorico(status);
+    }
+
+    window.onload = () => renderizarHistorico('Todos');
+  </script>
+</body>
+</html>

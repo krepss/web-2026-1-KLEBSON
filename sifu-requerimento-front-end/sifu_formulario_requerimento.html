@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIFU - Novo Requerimento</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            azulUfersa: '#243E6A',
+            azulEscuro: '#1e3560',
+            verdeUfersa: '#99CC33',
+            cinzaBg: '#f0f2f5',
+          },
+          fontFamily: {
+            roboto: ['Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-roboto bg-cinzaBg min-h-screen pb-10">
+
+  <header class="bg-azulUfersa text-white px-5 py-3 flex items-center justify-between shadow-md sticky top-0 z-50">
+    <div class="flex items-center gap-4">
+      <div class="cursor-pointer" onclick="window.location.href='sifu_dashboard_discente.html'">
+        <div class="h-0.5 bg-verdeUfersa w-12 mb-1"></div>
+        <h2 class="text-lg font-bold tracking-widest">UFERSA</h2>
+        <div class="h-0.5 bg-verdeUfersa w-12 mt-1"></div>
+      </div>
+      <div class="hidden md:block w-px h-7 bg-white/20 mx-2"></div>
+      <span class="text-verdeUfersa text-xs font-medium uppercase tracking-wider hidden md:inline">SIFU — Requerimentos</span>
+    </div>
+
+    <div class="flex items-center gap-3 bg-white/10 rounded-full pl-1.5 pr-3 py-1.5 border border-white/5">
+      <div class="w-7 h-7 rounded-full bg-verdeUfersa flex items-center justify-center text-azulUfersa text-[11px] font-bold">KD</div>
+      <span class="text-xs hidden sm:inline">Klebson Davi · Discente</span>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-5 mt-6 mb-4 flex items-center gap-2 text-xs text-slate-500">
+    <a href="sifu_dashboard_discente.html" class="text-azulUfersa font-bold hover:underline">Meu painel</a>
+    <span>›</span>
+    <span>Abrir novo requerimento</span>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-5 flex flex-col lg:flex-row gap-6">
+    
+    <div class="flex-1 bg-white rounded-xl border border-slate-200 p-6 md:p-8 shadow-sm">
+      <h1 class="text-xl font-bold text-azulUfersa">Novo Requerimento</h1>
+      <p class="text-sm text-slate-500 mb-8">Preencha as informações e anexe os documentos obrigatórios.</p>
+
+      <div class="flex items-center justify-between mb-10 relative">
+        <div class="absolute left-0 top-4 w-full h-1 bg-slate-100 -z-10"></div>
+        <div class="absolute left-0 top-4 w-1/3 h-1 bg-verdeUfersa -z-10"></div>
+
+        <div class="flex flex-col items-center bg-white px-2">
+          <div class="w-8 h-8 rounded-full bg-verdeUfersa text-green-900 flex items-center justify-center text-sm font-bold shadow-sm">✓</div>
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Pessoal</span>
+        </div>
+        <div class="flex flex-col items-center bg-white px-2">
+          <div class="w-8 h-8 rounded-full bg-azulUfersa text-white flex items-center justify-center text-sm font-bold shadow-md ring-4 ring-blue-50">2</div>
+          <span class="text-[10px] font-bold text-azulUfersa uppercase tracking-widest mt-2">Pedido</span>
+        </div>
+        <div class="flex flex-col items-center bg-white px-2">
+          <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-sm font-bold">3</div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Anexos</span>
+        </div>
+        <div class="flex flex-col items-center bg-white px-2">
+          <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center text-sm font-bold">4</div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Revisão</span>
+        </div>
+      </div>
+
+      <div class="space-y-5">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Tipo de requerimento</label>
+          <select id="tipo-req" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg bg-cinzaBg focus:bg-white focus:border-blue-500 outline-none transition-all text-sm font-medium text-slate-700">
+            <option>Turma Especial</option>
+            <option>Aproveitamento de Estudos</option>
+            <option>Revisão de Nota</option>
+            <option>Dispensa de Disciplina</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Código da disciplina</label>
+            <input type="text" id="cod-disc" value="CIE0023" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg bg-cinzaBg focus:bg-white focus:border-blue-500 outline-none transition-all text-sm font-medium text-slate-700">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Semestre pretendido</label>
+            <select class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg bg-cinzaBg focus:bg-white focus:border-blue-500 outline-none transition-all text-sm font-medium text-slate-700">
+              <option>2026.1</option>
+              <option>2026.2</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Nome da disciplina</label>
+          <input type="text" id="nome-disc" value="Cálculo II" class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg bg-cinzaBg focus:bg-white focus:border-blue-500 outline-none transition-all text-sm font-medium text-slate-700">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Justificativa</label>
+          <textarea rows="4" placeholder="Descreva o motivo do requerimento..." class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg bg-cinzaBg focus:bg-white focus:border-blue-500 outline-none transition-all text-sm font-medium text-slate-700 resize-y">Solicito turma especial em Cálculo II pois fui reprovado por faltas no semestre 2025.2 em decorrência de problema de saúde devidamente comprovado...</textarea>
+        </div>
+      </div>
+
+      <div class="w-full h-px bg-slate-100 my-8"></div>
+
+      <div>
+        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Documentos obrigatórios</label>
+        
+        <div class="border-2 border-dashed border-verdeUfersa/50 bg-green-50/50 hover:bg-green-50 rounded-xl p-8 text-center cursor-pointer transition-colors">
+          <span class="text-3xl mb-2 block">📎</span>
+          <p class="text-sm font-bold text-azulUfersa">Arraste arquivos ou clique para selecionar</p>
+          <p class="text-xs text-slate-500 mt-1">PDF ou imagem · Máximo 10 MB por arquivo</p>
+        </div>
+
+        <div class="mt-4 space-y-2">
+          <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm">
+            <span class="text-red-500 text-lg">📄</span>
+            <div class="flex-1">
+              <p class="text-xs font-bold text-slate-700">historico_escolar.pdf</p>
+              <p class="text-[10px] text-slate-400">2,4 MB</p>
+            </div>
+            <span class="text-green-500 font-bold text-sm pr-2">✓</span>
+          </div>
+          <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg p-2.5 shadow-sm">
+            <span class="text-red-500 text-lg">📄</span>
+            <div class="flex-1">
+              <p class="text-xs font-bold text-slate-700">atestado_medico.pdf</p>
+              <p class="text-[10px] text-slate-400">0,8 MB</p>
+            </div>
+            <span class="text-green-500 font-bold text-sm pr-2">✓</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col-reverse sm:flex-row gap-3 mt-8">
+        <button onclick="window.location.href='sifu_dashboard_discente.html'" class="px-6 py-3 border border-slate-300 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-50 transition-colors w-full sm:w-auto text-center">Voltar</button>
+        <button onclick="enviarRequerimento()" class="px-6 py-3 bg-azulUfersa text-white rounded-lg text-sm font-bold shadow-md hover:bg-azulEscuro transition-colors w-full flex-1 text-center">Finalizar e Enviar →</button>
+      </div>
+
+    </div>
+
+    <aside class="w-full lg:w-80 shrink-0 space-y-5">
+      
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+        <h3 class="text-sm font-bold text-azulUfersa mb-4">Dados do Solicitante</h3>
+        <div class="space-y-2.5">
+          <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+            <span class="text-xs text-slate-500">Nome</span>
+            <span class="text-xs font-bold text-slate-800">Klebson Davi</span>
+          </div>
+          <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+            <span class="text-xs text-slate-500">Matrícula</span>
+            <span class="text-xs font-bold text-slate-800">2021001234</span>
+          </div>
+          <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+            <span class="text-xs text-slate-500">Curso</span>
+            <span class="text-xs font-bold text-slate-800">Eng. de Software</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-slate-500">CR Atual</span>
+            <span class="text-xs font-bold text-slate-800">7,8</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-green-50 border border-verdeUfersa/50 rounded-xl p-5">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-2 h-2 rounded-full bg-verdeUfersa"></div>
+          <h3 class="text-xs font-bold text-green-800">Análise por IA (Triagem)</h3>
+        </div>
+        <p class="text-[11px] text-slate-700 leading-relaxed mb-4">
+          Histórico escolar processado automaticamente. Pré-requisitos para <span class="font-bold">Cálculo II</span> verificados: Cálculo I concluído com nota 7,5.
+        </p>
+        <div class="bg-green-100 border border-green-200 px-3 py-2 rounded-lg flex items-center gap-2">
+          <span class="text-green-600 text-sm font-black">✓</span>
+          <span class="text-[11px] font-bold text-green-800">Apto — Pré-requisitos confirmados</span>
+        </div>
+      </div>
+
+    </aside>
+  </main>
+
+  <script>
+    function enviarRequerimento() {
+      // 1. Coleta os dados
+      const novo = {
+        tipo: document.getElementById('tipo-req').value,
+        codigo: document.getElementById('cod-disc').value,
+        disciplina: document.getElementById('nome-disc').value,
+        data: new Date().toLocaleDateString('pt-BR'),
+        status: 'Pendente'
+      };
+
+      // 2. Salva no LocalStorage
+      let lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+      lista.push(novo);
+      localStorage.setItem('meusRequerimentos', JSON.stringify(lista));
+
+      // 3. Feedback e Redirecionamento
+      alert("Requerimento enviado com sucesso!");
+      window.location.href = 'sifu_dashboard_discente.html';
+    }
+  </script>
+</body>
+</html>

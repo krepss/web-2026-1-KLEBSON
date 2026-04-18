@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIFU - Status em Tempo Real</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            azulUfersa: '#243E6A',
+            azulEscuro: '#1e3560',
+            verdeUfersa: '#99CC33',
+            cinzaBg: '#f0f2f5',
+          },
+          fontFamily: {
+            roboto: ['Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-roboto bg-cinzaBg min-h-screen">
+
+  <header class="bg-azulUfersa text-white px-5 py-3 flex items-center justify-between shadow-md sticky top-0 z-50">
+    <div class="flex items-center gap-4">
+      <div class="cursor-pointer" onclick="window.location.href='sifu_dashboard_discente.html'">
+        <div class="h-0.5 bg-verdeUfersa w-12 mb-1"></div>
+        <h2 class="text-lg font-bold tracking-widest">UFERSA</h2>
+        <div class="h-0.5 bg-verdeUfersa w-12 mt-1"></div>
+      </div>
+      <div class="hidden md:block w-px h-7 bg-white/20 mx-2"></div>
+      <span class="text-verdeUfersa text-xs font-medium uppercase tracking-wider hidden md:inline">SIFU — Requerimentos</span>
+    </div>
+
+    <div class="flex items-center gap-3 bg-white/10 rounded-full pl-1.5 pr-3 py-1.5 border border-white/5">
+      <div class="w-7 h-7 rounded-full bg-verdeUfersa flex items-center justify-center text-azulUfersa text-[11px] font-bold">KD</div>
+      <span class="text-xs hidden sm:inline">Klebson Davi · Discente</span>
+    </div>
+  </header>
+
+  <div class="flex flex-col md:flex-row">
+    <aside class="w-full md:w-64 bg-azulEscuro text-white/70 md:min-h-[calc(100vh-60px)] p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible sticky top-[60px] md:top-[60px] z-40">
+      <nav class="flex flex-row md:flex-col w-full gap-1">
+        <button onclick="window.location.href='sifu_dashboard_discente.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all">
+          <span class="md:hidden">🏠</span> <span class="hidden md:inline">Meu painel</span>
+        </button>
+        <button onclick="window.location.href='sifu_meus_requerimentos.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all">
+          <span class="md:hidden">📋</span> <span class="hidden md:inline">Meus requerimentos</span>
+        </button>
+        <button onclick="window.location.href='sifu_status_requerimento.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-azulUfersa text-white w-full text-sm font-medium transition-all">
+          <span class="md:hidden">🕒</span> <span class="hidden md:inline">Status em tempo real</span>
+        </button>
+      </nav>
+      <div class="hidden md:block w-full h-px bg-white/5 my-4"></div>
+      <nav class="flex flex-row md:flex-col w-full gap-1">
+        <button onclick="window.location.href='sifu_formulario_requerimento.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all">
+          <span class="md:hidden">➕</span> <span class="hidden md:inline">Abrir requerimento</span>
+        </button>
+        <button onclick="window.location.href='sifu_tela_login.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all text-red-400">
+          <span class="md:hidden">🚪</span> <span class="hidden md:inline">Sair (Logoff)</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="flex-1 p-5 md:p-8">
+      <div class="mb-8">
+        <h1 class="text-xl font-bold text-azulUfersa">Acompanhamento de Requerimento</h1>
+        <p class="text-sm text-slate-500">Rastreie o progresso da sua solicitação etapa por etapa.</p>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm max-w-3xl">
+        <div>
+          <h2 class="text-lg font-bold text-slate-800" id="rt-titulo">Turma Especial — Cálculo II</h2>
+          <p class="text-xs text-slate-500 mt-1" id="rt-meta">Enviado em 02/06/2026 · Protocolo: REQ-2026-9921</p>
+        </div>
+        <span id="rt-status" class="px-3 py-1 bg-blue-100 text-blue-800 text-[10px] font-bold rounded-full uppercase tracking-tighter whitespace-nowrap">Em Análise</span>
+      </div>
+
+      <div class="max-w-3xl relative pt-2 pb-6 pl-4 md:pl-0">
+        <div class="absolute left-[28px] md:left-[19px] top-4 bottom-10 w-[2px] bg-slate-200"></div>
+
+        <div class="relative pl-12 md:pl-14 mb-8">
+          <div class="absolute left-3 md:left-1 top-2 w-8 h-8 rounded-full bg-verdeUfersa text-green-900 flex items-center justify-center font-bold text-sm border-4 border-cinzaBg z-10 shadow-sm">✓</div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4 md:p-5 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start mb-2">
+              <h3 class="text-sm font-bold text-azulUfersa">Requerimento Enviado</h3>
+              <span class="text-[11px] text-slate-400 mt-1 sm:mt-0">02/06/2026 às 14:30</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">O seu requerimento e os documentos anexos (Histórico Escolar, Atestado Médico) foram recebidos pelo sistema SIFU.</p>
+          </div>
+        </div>
+
+        <div class="relative pl-12 md:pl-14 mb-8">
+          <div class="absolute left-3 md:left-1 top-2 w-8 h-8 rounded-full bg-verdeUfersa text-green-900 flex items-center justify-center font-bold text-sm border-4 border-cinzaBg z-10 shadow-sm">✓</div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4 md:p-5 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start mb-2">
+              <h3 class="text-sm font-bold text-azulUfersa">Triagem Automática (IA)</h3>
+              <span class="text-[11px] text-slate-400 mt-1 sm:mt-0">02/06/2026 às 14:31</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed mb-3">O Agente de Triagem analisou o seu histórico.</p>
+            <div class="bg-green-50 border border-verdeUfersa/40 px-3 py-2 rounded-lg flex items-start gap-2">
+              <div class="w-1.5 h-1.5 bg-verdeUfersa rounded-full mt-1.5 shrink-0"></div>
+              <p class="text-[11px] text-slate-700 leading-relaxed"><strong class="text-green-800">Resultado: Apto.</strong> Pré-requisito (Cálculo I) verificado. Documentação validada preliminarmente. Encaminhado para a coordenação.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative pl-12 md:pl-14 mb-8">
+          <div class="absolute left-3 md:left-1 top-2 w-8 h-8 rounded-full bg-azulUfersa text-white flex items-center justify-center text-xs border-4 border-cinzaBg z-10 shadow-sm ring-4 ring-blue-100">⏳</div>
+          <div class="bg-white border-2 border-azulUfersa rounded-xl p-4 md:p-5 shadow-md">
+            <div class="flex flex-col sm:flex-row justify-between items-start mb-2">
+              <h3 class="text-sm font-bold text-azulUfersa">Análise da Coordenação</h3>
+              <span class="text-[11px] font-bold text-azulUfersa mt-1 sm:mt-0">Etapa Atual</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">O processo está atualmente na fila de trabalho da Coordenação. A aguardar parecer final do coordenador.</p>
+          </div>
+        </div>
+
+        <div id="etapa-final" class="relative pl-12 md:pl-14">
+          <div class="absolute left-3 md:left-1 top-2 w-8 h-8 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center text-sm border-4 border-cinzaBg z-10" id="dot-final">🏁</div>
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 md:p-5 opacity-70" id="card-final">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-sm font-bold text-slate-500" id="titulo-final">Resultado Final</h3>
+              <span class="text-[11px] text-slate-400" id="data-final">--/--/----</span>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed" id="desc-final">A decisão final (Deferido ou Indeferido) será publicada aqui.</p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    window.onload = () => {
+      const lista = JSON.parse(localStorage.getItem('meusRequerimentos') || '[]');
+      if (lista.length > 0) {
+        // Pega o último requerimento enviado
+        const ultimoReq = lista[lista.length - 1];
+        
+        document.getElementById('rt-titulo').innerText = `${ultimoReq.tipo} — ${ultimoReq.disciplina}`;
+        document.getElementById('rt-meta').innerText = `Enviado em ${ultimoReq.data} · Protocolo: REQ-2026-${Math.floor(Math.random() * 9000) + 1000}`;
+        
+        // Atualiza o pill de status do cabeçalho
+        const statusPill = document.getElementById('rt-status');
+        statusPill.innerText = ultimoReq.status;
+        
+        if (ultimoReq.status === 'Pendente') {
+          statusPill.className = 'px-3 py-1 bg-amber-100 text-amber-800 text-[10px] font-bold rounded-full uppercase tracking-tighter whitespace-nowrap';
+        } else if (ultimoReq.status === 'Em Análise') {
+          statusPill.className = 'px-3 py-1 bg-blue-100 text-blue-800 text-[10px] font-bold rounded-full uppercase tracking-tighter whitespace-nowrap';
+        } else if (ultimoReq.status === 'Deferido' || ultimoReq.status === 'Indeferido') {
+          
+          statusPill.className = ultimoReq.status === 'Deferido' 
+            ? 'px-3 py-1 bg-green-100 text-green-800 text-[10px] font-bold rounded-full uppercase tracking-tighter whitespace-nowrap'
+            : 'px-3 py-1 bg-red-100 text-red-800 text-[10px] font-bold rounded-full uppercase tracking-tighter whitespace-nowrap';
+          
+          // Se já foi julgado pelo coordenador, atualiza o Card Final da Timeline
+          const dotFinal = document.getElementById('dot-final');
+          const cardFinal = document.getElementById('card-final');
+          
+          dotFinal.className = 'absolute left-3 md:left-1 top-2 w-8 h-8 rounded-full bg-verdeUfersa text-green-900 flex items-center justify-center font-bold text-sm border-4 border-cinzaBg z-10 shadow-sm';
+          dotFinal.innerText = '✓';
+          
+          cardFinal.className = 'bg-white border-2 border-verdeUfersa rounded-xl p-4 md:p-5 shadow-md';
+          document.getElementById('titulo-final').className = 'text-sm font-bold text-azulUfersa';
+          document.getElementById('titulo-final').innerText = "Resultado: " + ultimoReq.status;
+          document.getElementById('data-final').innerText = ultimoReq.dataDecisao || 'Concluído';
+          
+          document.getElementById('desc-final').className = 'text-xs text-slate-700 leading-relaxed';
+          document.getElementById('desc-final').innerHTML = `
+            <span class="font-bold text-slate-900">Parecer da Coordenação:</span><br>
+            <p class="italic mt-1 border-l-2 border-slate-300 pl-3">"${ultimoReq.parecer || 'Sem observações adicionais.'}"</p>
+          `;
+
+          // Tira o destaque do Passo 3
+          const passo3 = document.querySelectorAll('.tl-item')[2]; // Se fosse usar classe, mas ajustaremos no DOM via pai se precisar.
+        }
+      }
+    };
+  </script>
+</body>
+</html>
