@@ -69,9 +69,10 @@
         <button onclick="window.location.href='sifu_formulario_requerimento.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all">
           <span class="md:hidden">➕</span> <span class="hidden md:inline">Abrir requerimento</span>
         </button>
-        <button onclick="window.location.href='sifu_tela_login.html'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all text-red-400">
-          <span class="md:hidden">🚪</span> <span class="hidden md:inline">Sair (Logoff)</span>
-        </button>
+       <button onclick="logout()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 hover:text-white w-full text-sm transition-all text-red-400">
+    <span class="md:hidden">🚪</span> 
+    <span class="hidden md:inline">Sair (Logoff)</span>
+</button>
       </nav>
     </aside>
 
@@ -194,6 +195,20 @@
             }
         }
     };
+</script>
+
+  <script>
+function logout() {
+    // 1. Limpa o token do seu navegador (essencial para segurança)
+    localStorage.removeItem('sifu_id_token');
+    
+    // 2. Avisa a AWS que você está saindo
+    const clientId = "6hn3s26lau4qi2iuf3tjfk9hnp";
+    const logoutUri = "https://sifu.klebson.sifu3.web.ufersa.dev.br/index.html";
+    const cognitoDomain = "https://us-east-1b3aaepf09.auth.us-east-1.amazoncognito.com";
+
+    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${logoutUri}`;
+}
 </script>
 </body>
 </html>
