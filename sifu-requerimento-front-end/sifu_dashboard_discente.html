@@ -199,15 +199,12 @@
 
   <script>
 function logout() {
-    // 1. Limpa o token do seu navegador (essencial para segurança)
+    // 1. Limpa o token do navegador (Isso é o mais importante!)
     localStorage.removeItem('sifu_id_token');
     
-    // 2. Avisa a AWS que você está saindo
-    const clientId = "6hn3s26lau4qi2iuf3tjfk9hnp";
-    const logoutUri = "https://sifu.klebson.sifu3.web.ufersa.dev.br/index.html";
-    const cognitoDomain = "https://us-east-1b3aaepf09.auth.us-east-1.amazoncognito.com";
-
-    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${logoutUri}`;
+    // 2. Redireciona direto para a sua tela de login inicial
+    // Sem passar pelo link de logout da AWS que está dando erro de domínio
+    window.location.href = 'index.html'; 
 }
 </script>
 </body>
