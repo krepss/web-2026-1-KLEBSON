@@ -174,5 +174,26 @@
 
     window.onload = carregarRequerimentos;
   </script>
+  <script>
+    window.onload = function() {
+        // Pega o que vem depois do '#' na URL (onde o Cognito manda o token)
+        const hash = window.location.hash.substring(1);
+        
+        if (hash) {
+            const params = new URLSearchParams(hash);
+            const idToken = params.get('id_token');
+            
+            if (idToken) {
+                // Salva o token no Local Storage para o professor ver
+                localStorage.setItem('sifu_id_token', idToken);
+                
+                alert("Sucesso! O Token do Google foi capturado e salvo.");
+                
+                // Limpa a URL para ficar bonitinha
+                window.history.replaceState(null, null, window.location.pathname);
+            }
+        }
+    };
+</script>
 </body>
 </html>
