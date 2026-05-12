@@ -239,15 +239,14 @@ function logout() {
 
         try {
             // SUBSTITUA ABAIXO PELA SUA "INVOKE URL" QUE APARECEU NO DEPLOY DA API
-            const apiURL = 'https://03t17ixou6.execute-api.us-east-1.amazonaws.com/prod/chatbot'; 
-
             const response = await fetch(apiURL, {
-                method: 'POST',
-                headers: {
-                    'Authorization': tokenChat, // O Authorizer do Cognito exige este token
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ mensagem: userMsg })
+            method: 'POST',
+          headers: {
+        // Certifique-se de que está usando 'sifu_id_token' (o ID Token é o que o Cognito valida)
+                  'Authorization': localStorage.getItem('sifu_id_token'), 
+                  'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ mensagem: userMsg })
             });
 
             const data = await response.json();
