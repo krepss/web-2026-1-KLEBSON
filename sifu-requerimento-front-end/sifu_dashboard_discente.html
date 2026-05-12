@@ -239,23 +239,33 @@ function logout() {
 
         try {
             // SUBSTITUA ABAIXO PELA SUA "INVOKE URL" QUE APARECEU NO DEPLOY DA API
-            const response = await fetch(apiURL, {
-            method: 'POST',
-          headers: {
-        // Certifique-se de que está usando 'sifu_id_token' (o ID Token é o que o Cognito valida)
-                  'Authorization': localStorage.getItem('sifu_id_token'), 
-                  'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ mensagem: userMsg })
-            });
+            const response = await fetch(apiURL, {async function enviarMensagem() {
+    const tokenChat = localStorage.getItem('sifu_id_token'); // Confira este nome!
+    const msg = document.getElementById('chat-input').value;
 
-            const data = await response.json();
-            resDiv.innerHTML += `<div style="color: blue;"><b>IA:</b> ${data.resposta}</div>`;
-            resDiv.scrollTop = resDiv.scrollHeight;
-        } catch (error) {
-            resDiv.innerHTML += `<div style="color: red;">Erro ao comunicar com a API.</div>`;
-        }
+    if (!tokenChat) {
+        alert("Erro: Token não encontrado. Faça login novamente.");
+        return;
     }
+
+    try {
+        const response = await fetch('https://03t17ixou6.execute-api.us-east-1.amazonaws.com/prod/chatbot', {
+            method: 'POST',
+            headers: {
+                'Authorization': tokenChat, // O token capturado no login
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ mensagem: msg })
+        });
+
+        const data = await response.json();
+        // Adiciona a resposta na tela
+        document.getElementById('chat-res').innerHTML += `<div><b>IA:</b> ${data.resposta}</div>`;
+    } catch (error) {
+        console.error(error);
+        document.getElementById('chat-res').innerHTML += `<div style="color:red">Erro ao comunicar com a API.</div>`;
+    }
+}
 </script>
 </body>
 </html>
