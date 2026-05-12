@@ -207,5 +207,56 @@ function logout() {
     window.location.href = 'index.html'; 
 }
 </script>
+  <div id="chat-wrapper" style="display:none; position: fixed; bottom: 20px; right: 20px; width: 300px; background: white; border: 1px solid #ccc; border-radius: 10px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;">
+    <h3 style="color: #333; margin-top: 0;">SIFU Chatbot</h3>
+    <div id="chat-res" style="height: 150px; overflow-y: auto; margin-bottom: 10px; font-size: 14px; border-bottom: 1px solid #eee;">
+        Olá! Como posso ajudar hoje?
+    </div>
+    <div style="display: flex; gap: 5px;">
+        <input type="text" id="chat-input" placeholder="Digite aqui..." style="flex: 1; padding: 5px; border-radius: 5px; border: 1px solid #ddd;">
+        <button onclick="enviarMensagem()" style="background: #4A90E2; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Enviar</button>
+    </div>
+</div>
+
+<script>
+    // 1. Verifica se o usuário está logado através do token que salvamos antes
+    const tokenChat = localStorage.getItem('sifu_id_token');
+    
+    if (tokenChat) {
+        // Se o token existe, mostra o chat
+        document.getElementById('chat-wrapper').style.display = 'block';
+    }
+
+    async function enviarMensagem() {
+        const input = document.getElementById('chat-input');
+        const resDiv = document.getElementById('chat-res');
+        const userMsg = input.value;
+
+        if (!userMsg) return;
+
+        resDiv.innerHTML += `<div><b>Você:</b> ${userMsg}</div>`;
+        input.value = '';
+
+        try {
+            // SUBSTITUA ABAIXO PELA SUA "INVOKE URL" QUE APARECEU NO DEPLOY DA API
+            const apiURL = 'https://03t17ixou6.execute-api.us-east-1.amazonaws.com/prod/chatbot'; 
+
+            const response = await fetch(apiURL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': tokenChat, // O Authorizer do Cognito exige este token
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ mensagem: userMsg })
+            });
+
+            const data = await response.json();
+            resDiv.innerHTML += `<div style="color: blue;"><b>IA:</b> ${data.resposta}</div>`;
+            resDiv.scrollTop = resDiv.scrollHeight;
+        } catch (error) {
+            resDiv.innerHTML += `<div style="color: red;">Erro ao comunicar com a API.</div>`;
+        }
+    }
+</script>
 </body>
 </html>
